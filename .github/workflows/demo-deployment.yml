@@ -1,0 +1,35 @@
+name: Build and Deploy ASP.NET Core App
+
+on:
+  [workflow_dispatch]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Extract release version
+      id: release_version
+      run: |
+        VERSION=$(echo "${{ github.ref }}" | sed -E 's/^refs\/heads\/release\/(.*)/\1/')
+        echo "IMAGE_VERSION=$VERSION" >> $GITHUB_ENV
+    
+    - name: Build Docker Image with Version Tag
+      run: | 
+        docker build src/Deployment.Test.Backend/Api -t yolda:${{ env.IMAGE_VERSION }}
+    
+    - name: Build Docker Image with Latest Tag
+      run: | 
+        docker build src/Deployment.Test.Backend/Api -t yolda:latest
+
+    - name: Push Docker Images
+      run: |
+        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
+        docker push sultonmax/yolda:${{ env.IMAGE_VERSION }}
+        docker push yolda:latest
+
+
+
