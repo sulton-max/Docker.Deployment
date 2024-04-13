@@ -11,7 +11,10 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-  
+
+    - name: List files in the API directory
+      run: ls -al src/Deployment.Test.Backend/Api/
+
     - name: Build Docker Image with Latest Tag
       run: | 
         docker build -f src/Deployment.Test.Backend/Api/Dockerfile -t test-deployment:latest src/Deployment.Test.Backend/Api
