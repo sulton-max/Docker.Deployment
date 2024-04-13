@@ -27,6 +27,10 @@ jobs:
     - name: Build and push
       uses: docker/build-push-action@v5
       with:
-        context: src/Deployment.Test.Backend/Api/Dockerfile
+        context: src/Deployment.Test.Backend
+        file: src/Deployment.Test.Backend/Api/Dockerfile
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/test-deployment:latest
         push: true
+
+
+       
