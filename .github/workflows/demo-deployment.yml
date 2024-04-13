@@ -44,7 +44,10 @@ jobs:
 
       - name: Deploy to Azure Container App
         run: |
-          az containerapp update 
-            -n deployment-test
-            -g ${{ secrets.AZ_RG_NAME }}
+          az containerapp update
+            --name deployment-test
+            --resource-group ${{ secrets.AZ_RG_NAME }}
             --image ${{ secrets.DOCKERHUB_USERNAME }}/test-deployment:latest
+            --registry-login-server docker.io
+            --registry-username ${{ secrets.DOCKERHUB_USERNAME }}
+            --registry-password ${{ secrets.DOCKERHUB_TOKEN }}
