@@ -9,16 +9,14 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout
+      uses: actions/checkout@v4
   
     - name: Build Docker Image with Latest Tag
       run: | 
-        docker build src/Deployment.Test.Backend/Api -t test-deployment:latest
+        docker build -f src/Deployment.Test.Backend/Api/Dockerfile -t test-deployment:latest src/Deployment.Test.Backend/Api
 
     - name: Push Docker Images
       run: |
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_TOKEN }}
         docker push test-deployment:latest
-
-
-
