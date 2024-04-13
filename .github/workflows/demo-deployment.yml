@@ -32,5 +32,19 @@ jobs:
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/test-deployment:latest
         push: true
 
-
-       
+  deploy-container-app:
+    needs: build
+    runs-on: ubuntu-latest
+  
+    steps:
+      - name: Log in to Azure Container App
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZ_SP_CREDENTIALS }}
+  
+      - name: Deploy to Azure Container App
+        run: |
+          az containerapp update
+            --name deployment-test
+            --resource-group ${{ secrets.AZ_RG_NAME }}
+            --image ${{ secrets.DOCKERHUB_USERNAME }}/test-deployment:latest
